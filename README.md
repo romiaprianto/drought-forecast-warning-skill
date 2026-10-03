@@ -3,7 +3,7 @@
 Companion repository for the article *"Forecast skill is not warning skill: an open, transferable framework for
 data-driven drought forecasting and decision support"* (submitted to *Environmental Modelling & Software*).
 
-DOI of this archive: [REPOSITORY DOI] · Licence: code under the MIT licence (`LICENSE`); data and results under CC BY 4.0 (`LICENSE-DATA`)
+[![DOI](https://zenodo.org/badge/1402887818.svg)](https://doi.org/10.5281/zenodo.23118247) · Licence: code under the MIT licence (`LICENSE`); data and results under CC BY 4.0 (`LICENSE-DATA`)
 
 The repository contains the forecasting pipeline, the NASA POWER input data for the ten grid cells, the result files
 behind every table and figure of the article, and one script per table or figure that regenerates it from those files.
