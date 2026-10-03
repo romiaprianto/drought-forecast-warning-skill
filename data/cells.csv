@@ -1,0 +1,11 @@
+cell_id,name,lat,lon,elev,n_days,gwet_mean,gwet_std,pct_missing
+lombok,Lombok (NTB),-8.6,116.3,174.8,10958,0.651,0.126,0.0
+sumbawaB,West Sumbawa (NTB),-8.8,116.9,150.4,10958,0.613,0.121,0.0
+sumbawaC,Central Sumbawa (base),-8.5,117.4,210.5,10958,0.654,0.122,0.0
+bima,Bima/Dompu (E Sumbawa),-8.5,118.5,204.2,10958,0.598,0.192,0.0
+manggarai,Manggarai (W Flores),-8.6,120.4,531.0,10958,0.691,0.219,0.0
+ende,Ende (C Flores),-8.7,121.6,164.7,10958,0.766,0.153,0.0
+floresT,East Flores,-8.4,122.9,60.6,10958,0.558,0.212,0.0
+sumba,Sumba,-9.6,120.2,237.0,10958,0.755,0.144,0.0
+kupang,Kupang (W Timor),-10.1,123.6,188.8,10958,0.645,0.177,0.0
+soe,Soe (Timor interior),-9.9,124.2,309.7,10958,0.61,0.194,0.0

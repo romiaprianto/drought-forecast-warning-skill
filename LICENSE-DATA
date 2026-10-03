@@ -1,0 +1,12 @@
+Data and results licence
+
+The files in data/, results/, results_mc/ and results_mc_regional/ are licensed under the
+Creative Commons Attribution 4.0 International licence (CC BY 4.0):
+https://creativecommons.org/licenses/by/4.0/
+
+You may share and adapt them for any purpose, provided that you give appropriate credit by citing
+the article and this archive, and indicate if changes were made.
+
+The input series in data/ are extracts of the NASA POWER project (https://power.larc.nasa.gov/),
+which are freely available; please also acknowledge the NASA Langley Research Center POWER Project
+when reusing them.

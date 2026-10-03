@@ -1,0 +1,8 @@
+check,setting,skill_gwet_h14
+window_length,30,0.3379110506107048
+window_length,60,0.36140220502287645
+window_length,90,0.3690611014337397
+window_length,120,0.3840488282895661
+pet_wind,wind_WS2M_or_default,0.3690611014337397
+pet_wind,wind_fixed_2ms,0.37800435062977344
+rolling_vs_monthly_spei,pearson_corr_test,0.6730464960020759
