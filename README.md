@@ -12,12 +12,12 @@ behind every table and figure of the article, and one script per table or figure
 
 | Folder | Content |
 |---|---|
-| `code/` | Forecasting and verification pipeline (`tcn_drought_pipeline_v2.py`, single cell; `tcn_drought_multicell.py`, REV4, multi-cell in-domain and leave-one-cell-out transfer), dissociation analysis, NASA POWER download script, shared drawing code for Figures 1, 4 and 6 |
+| `code/` | Forecasting and verification pipeline (`tcn_drought_pipeline_v2.py`, single cell; `tcn_drought_multicell.py`, REV5, multi-cell in-domain and leave-one-cell-out transfer; see `CHANGES_REV5.md`), dissociation analysis, NASA POWER download script, shared drawing code for Figures 1, 4 and 6 |
 | `data/` | `cells.csv` (cell coordinates and elevation) and `cell_<id>.csv` (daily NASA POWER series, 1996–2025) |
-| `notebooks/` | Kaggle runbooks used for the GPU runs: single cell, multi-cell, and the second multi-cell run for the regional aggregation fractions |
+| `notebooks/` | Kaggle runbooks used for the GPU runs: single cell (`runbook_kaggle.ipynb`), multi-cell in-domain and regional (`rev5_run1_indomain_kaggle.ipynb`) and transfer (`rev5_run2_3_transfer_kaggle.ipynb`) |
 | `results/` | Single-cell outputs (Central Sumbawa, C03) |
-| `results_mc/` | Multi-cell outputs (in-domain and transfer; per-fold parts in `parts/`) |
-| `results_mc_regional/` | Second multi-cell run with regional alerts at 20–50 % aggregation fractions |
+| `results_mc/` | Multi-cell outputs, REV5 (in-domain with regional alerts at 20–50 % aggregation fractions, and leave-one-cell-out transfer; per-run parts in `parts/`) |
+| `results_earlier_runs/` | Two runs of an earlier configuration of the multi-cell in-domain phase, used only for the run-to-run reproducibility statement |
 | `paper_analysis/` | One script per table or figure; outputs are written to `paper_outputs/` |
 
 ## Requirements
@@ -29,10 +29,11 @@ Earth coastlines (public domain) on first use.
 ## Reproducing the results
 
 1. **Input data** (optional, already included): `python code/download_nasapower_cells.py`.
-2. **Forecasts and verification**: run `notebooks/runbook_kaggle.ipynb` (single cell) and
-   `notebooks/runbook_kaggle_multisel.ipynb` (multi-cell) on a GPU; `notebooks/regional_threshold_kaggle.ipynb` produces
-   `results_mc_regional/`. Persistence, climatology and the Random Forest are deterministic; the TCN, LSTM and
-   Transformer are trained on a GPU and are not bit-for-bit reproducible between runs.
+2. **Forecasts and verification**: run `notebooks/runbook_kaggle.ipynb` (single cell) on a GPU, and
+   `notebooks/rev5_run1_indomain_kaggle.ipynb` (multi-cell in-domain and regional alerts) and
+   `notebooks/rev5_run2_3_transfer_kaggle.ipynb` (transfer, two shards); merge the multi-cell parts with
+   `tcn_drought_multicell.py` (`phase='merge'`). Persistence, climatology and the Random Forest are deterministic; the
+   TCN, LSTM and Transformer are trained on a GPU and are not bit-for-bit reproducible between runs.
 3. **Tables and figures**: from `paper_analysis/`, run the script listed below.
 
 ## Tables and figures
@@ -49,7 +50,8 @@ Earth coastlines (public domain) on first use.
 | Table 13 | `table13_ablation.py` | `results/ablation.csv` |
 | Table 14 | `table14_robustness.py` (retrains the Random Forest; about 1 h on a CPU, resumable) | `data/`, `results/robustness.csv` |
 | Table 15 | `table15_rule_threshold.py` | `results/` |
-| Table 16 | `table16_regional_fractions.py` | `results_mc/`, `results_mc_regional/` |
+| Table 16 | `table16_regional_fractions.py` | `results_mc/` |
+| Reproducibility (Section 3.6, Limitations) | `reproducibility_earlier_runs.py` | `results_earlier_runs/` |
 | Figure 1 | `fig01_framework.py` | — |
 | Figure 2 | `fig02_study_area.py` | Natural Earth coastlines |
 | Figures 3, 5 | `fig03_05_design.py` | — |

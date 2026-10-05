@@ -16,11 +16,11 @@ gs=fig.add_gridspec(2,2,height_ratios=[1.0,1.05],width_ratios=[1,0.028],hspace=0
                     left=0.115,right=0.93,top=0.95,bottom=0.07)
 ax=fig.add_subplot(gs[0,0]); cax=fig.add_subplot(gs[0,1])
 draw_land(ax,lw=0.6)
-norm=TwoSlopeNorm(vmin=20,vcenter=100,vmax=120); cmap=plt.cm.RdYlBu
+norm=TwoSlopeNorm(vmin=0,vcenter=100,vmax=120); cmap=plt.cm.RdYlBu
 sc=ax.scatter(sm.lon,sm.lat,s=90+sm.SS_transfer*520,c=sm.ret,cmap=cmap,norm=norm,edgecolors='#333',linewidths=0.9,zorder=3)
-mg=sm[sm.cell_id=='manggarai'].iloc[0]
+mg=sm.loc[sm.ret.idxmin()]
 ax.scatter([mg.lon],[mg.lat],s=430,facecolors='none',edgecolors='#B2182B',linewidths=2.0,linestyle=(0,(3,2)),zorder=4)
-ax.annotate('outlier: 28% retention',xy=(mg.lon+0.12,mg.lat-0.25),xytext=(121.55,-9.62),fontsize=9,color='#B2182B',
+ax.annotate(f'outlier: {mg.ret:.0f}% retention',xy=(mg.lon+0.12,mg.lat-0.25),xytext=(121.55,-9.62),fontsize=9,color='#B2182B',
             weight='bold',ha='left',va='center',arrowprops=dict(arrowstyle='-',color='#B2182B',lw=1.0),zorder=5)
 offs={'lombok':(-0.05,0.33),'sumbawaB':(0.05,-0.36),'sumbawaC':(0.05,0.33),'bima':(0.05,0.33),'manggarai':(0,0.36),
       'ende':(0,0.33),'floresT':(0,0.35),'sumba':(0,-0.40),'kupang':(-0.1,-0.42),'soe':(0.1,0.34)}
@@ -39,7 +39,7 @@ h=[Line2D([0],[0],marker='o',color='w',markerfacecolor='#d9d9d9',markeredgecolor
           markersize=np.sqrt(90+v*520),markeredgewidth=0.9,label=f'{v:.1f}') for v in [0.1,0.3,0.5]]
 ax.legend(handles=h,title='SS transfer (marker size)',loc='center',bbox_to_anchor=(0.215,0.335),fontsize=8,title_fontsize=8,ncol=3,framealpha=0.9,
           handletextpad=0.8,columnspacing=1.6,borderpad=0.9,labelspacing=1.2)
-cb=fig.colorbar(sc,cax=cax,ticks=[20,60,100,120]); cb.set_label('Retention of in-domain skill (%)',fontsize=9)
+cb=fig.colorbar(sc,cax=cax,ticks=[0,25,50,75,100,120]); cb.set_label('Retention of in-domain skill (%)',fontsize=9)
 cb.ax.axhline(100,color='#333',lw=1.0)
 ax2=fig.add_subplot(gs[1,:])
 d=sm.sort_values('ret').reset_index(drop=True)
@@ -50,7 +50,7 @@ for i,r in d.iterrows():
     ax2.scatter(r.SS_transfer,i,s=56,color=col,edgecolor='#333',lw=0.8,zorder=4)
     ax2.text(0.655,i,f'{r.ret:.0f}%',fontsize=9,va='center',color=col,weight='bold' if r.ret<50 else 'normal')
 ax2.set_yticks(np.arange(len(d))); ax2.set_yticklabels(d['short'],fontsize=9)
-ax2.set_xlim(0.05,0.70); ax2.set_ylim(-0.7,len(d)-0.3)
+ax2.set_xlim(min(0.0, float(d.SS_transfer.min()) - 0.02), 0.70); ax2.set_ylim(-0.7,len(d)-0.3)
 ax2.set_xlabel('Skill score relative to persistence (root-zone soil moisture)')
 ax2.grid(axis='x',alpha=0.25,lw=0.5); ax2.set_axisbelow(True)
 for s in ['top','right']: ax2.spines[s].set_visible(False)

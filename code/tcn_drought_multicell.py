@@ -1,4 +1,6 @@
-"""
+"""tcn_drought_multicell.py  --  REV5 (REV4 + per-cell chronological validation for the neural models; see CHANGES_REV5.md)
+
+
 ================================================================================
 MULTI-CELL DROUGHT FORECASTING  (transfer / spatial generalization)  -- REV4
 --------------------------------------------------------------------------------
@@ -65,6 +67,7 @@ CONFIG_MC = dict(
     rf_max_features="sqrt",                               # predictors considered per split
     transfer_rf_trees=100,                                # RF trees in the transfer phase
     save_values=True,                                     # daily SPEI/SSI export per cell
+    val_frac=0.10,                                        # REV5: last 10% of EACH cell's windows for early stopping
     # ---- sharding controls ----
     phase="all", only_held=None, only_horizons=None,
 )
@@ -133,7 +136,29 @@ def cell_windows(cells, cid, zstat, h, cfg, split):
     return P.build_windows(Xfull, Y, L, h)
 
 # ------------------------------ pooled fit/predict ----------------------------
-def fit_pool(Xtr, Ytr, cfg, models, n_trees=None):
+def split_per_cell(Xs, Ys, frac):
+    """REV5: chronological split of EACH cell's calibration windows. The first (1 - frac) of every cell's windows are
+    used for fitting the neural models and the last frac for early stopping, so that every cell contributes to both.
+    (REV4 passed the pooled array to Keras with validation_split, which held out the tail of the concatenation,
+    i.e. almost all of the last cell.)"""
+    Xf, Yf, Xv, Yv = [], [], [], []
+    for X, Y in zip(Xs, Ys):
+        k = int(round(len(X) * (1 - frac)))
+        Xf.append(X[:k]); Yf.append(Y[:k]); Xv.append(X[k:]); Yv.append(Y[k:])
+    return np.concatenate(Xf), np.concatenate(Yf), np.concatenate(Xv), np.concatenate(Yv)
+
+def train_keras_val(builder, Xfit, Yfit, Xval, Yval, in_shape, cfg, seed):
+    """Identical to tcn_drought_pipeline_v2.train_keras except that the validation set is passed explicitly."""
+    P._set_seed(seed)
+    model = builder(in_shape)
+    es = P.EarlyStopping(patience=8, restore_best_weights=True, monitor="val_loss")
+    model.fit(Xfit, Yfit, validation_data=(Xval, Yval), epochs=cfg["epochs"],
+              batch_size=cfg["batch_size"], verbose=0, callbacks=[es])
+    return model
+
+def fit_pool(Xtr, Ytr, cfg, models, n_trees=None, keras_split=None):
+    """Random Forest: all calibration windows (unchanged from REV4).
+    Neural models: keras_split = (Xfit, Yfit, Xval, Yval) from split_per_cell (REV5)."""
     fitted = {}
     if "RandomForest" in models:
         fitted["RandomForest"] = []
@@ -148,7 +173,10 @@ def fit_pool(Xtr, Ytr, cfg, models, n_trees=None):
         for mname in models:
             if mname not in bmap:
                 continue
-            fitted[mname] = [("keras", P.train_keras(bmap[mname], Xtr, Ytr, in_shape, cfg, s))
+            if keras_split is None:
+                raise ValueError("REV5 requires keras_split (per-cell validation) for the neural models")
+            Xf, Yf, Xv, Yv = keras_split
+            fitted[mname] = [("keras", train_keras_val(bmap[mname], Xf, Yf, Xv, Yv, in_shape, cfg, s))
                              for s in cfg["seeds"]]
     return fitted
 
@@ -196,7 +224,8 @@ def run_indomain(cells, cfg):
         Xtr, Ytr = [], []
         for cid in ids:
             Xw, Yw, _ = cell_windows(cells, cid, z, h, cfg, "train"); Xtr.append(Xw); Ytr.append(Yw)
-        fitted = fit_pool(np.concatenate(Xtr), np.concatenate(Ytr), cfg, learned)
+        fitted = fit_pool(np.concatenate(Xtr), np.concatenate(Ytr), cfg, learned,
+                          keras_split=split_per_cell(Xtr, Ytr, cfg["val_frac"]))
 
         models_all = ["Persistence", "Climatology"] + learned
         pool_obs = {"spei": [], "ssi": []}
@@ -268,7 +297,8 @@ def run_transfer(cells, cfg):
             for cid in train_ids:
                 Xw, Yw, _ = cell_windows(cells, cid, z, h, cfg, "train"); Xtr.append(Xw); Ytr.append(Yw)
             fitted = fit_pool(np.concatenate(Xtr), np.concatenate(Ytr), cfg, models,
-                              n_trees=cfg.get("transfer_rf_trees"))
+                              n_trees=cfg.get("transfer_rf_trees"),
+                              keras_split=split_per_cell(Xtr, Ytr, cfg["val_frac"]))
             Xte, Yte, Ylast = cell_windows(cells, held, z, h, cfg, "test")
             d = cells[held]["d"]; inv = d["sY"].inverse_transform
             Yte_o, Ylast_o = inv(Yte), inv(Ylast)

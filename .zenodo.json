@@ -1,14 +1,34 @@
 {
   "title": "Forecast skill is not warning skill: code, data and results",
   "upload_type": "software",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "language": "eng",
   "license": "mit",
   "description": "<p>Companion archive for the article <em>Forecast skill is not warning skill: an open, transferable framework for data-driven drought forecasting and decision support</em> (submitted to Environmental Modelling &amp; Software). It contains the forecasting and verification pipeline, daily NASA POWER input data for ten grid cells across the Nusa Tenggara dry-season gradient (Indonesia), the result files behind every table and figure of the article, and one script per table or figure that regenerates it.</p><p>Code is released under the MIT licence; data and results under CC BY 4.0 (see LICENSE-DATA).</p>",
   "creators": [
-    {"name": "Aprianto, Romi", "affiliation": "Department of Physics Education, Samawa University, Indonesia", "orcid": "0009-0000-2855-7570"},
-    {"name": "Tawaqqal, Akbar", "affiliation": "Department of Industrial Engineering, University of Mataram, Indonesia", "orcid": "0009-0000-2753-5011"},
-    {"name": "Syaharuddin", "affiliation": "Department of Mathematics Education, Muhammadiyah University of Mataram, Indonesia", "orcid": "0000-0001-8044-7766"}
+    {
+      "name": "Aprianto, Romi",
+      "affiliation": "Department of Physics Education, Samawa University, Indonesia",
+      "orcid": "0009-0000-2855-7570"
+    },
+    {
+      "name": "Tawaqqal, Akbar",
+      "affiliation": "Department of Industrial Engineering, University of Mataram, Indonesia",
+      "orcid": "0009-0000-2753-5011"
+    },
+    {
+      "name": "Syaharuddin",
+      "affiliation": "Department of Mathematics Education, Muhammadiyah University of Mataram, Indonesia",
+      "orcid": "0000-0001-8044-7766"
+    }
   ],
-  "keywords": ["drought early warning", "forecast verification", "temporal convolutional network", "SPEI", "soil moisture", "NASA POWER", "Indonesia"]
+  "keywords": [
+    "drought early warning",
+    "forecast verification",
+    "temporal convolutional network",
+    "SPEI",
+    "soil moisture",
+    "NASA POWER",
+    "Indonesia"
+  ]
 }
