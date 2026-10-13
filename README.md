@@ -1,4 +1,17 @@
-# Forecast skill is not warning skill — code, data and results
+# Drought forecast skill versus warning skill — code, data and results
+
+This repository accompanies two versions of the work.
+
+* **Current (v1.2.0, REV6):** *Persistence wins on days, calibrated machine-learning forecasts anticipate more drought
+  onsets: verifying data-driven drought warnings in eastern Indonesia* (submitted to *Natural Hazards*). Pipeline:
+  `code/tcn_drought_rev6.py` (see `code/CHANGES_REV6.md`); GPU runs: `notebooks/rev6_run1_indomain_kaggle.ipynb` and
+  `notebooks/rev6_run2_transfer_kaggle.ipynb`; results: `results_rev6/` and `results_rev6_transfer/`; every table and
+  figure of the article: `paper_analysis_rev6/` (see its README, one command: `python run_all.py`).
+* **Earlier (v1.1.0 and before):** the article described below, with its own scripts in `paper_analysis/`.
+
+## Earlier version
+
+**Forecast skill is not warning skill — code, data and results**
 
 Companion repository for the article *"Forecast skill is not warning skill: an open, transferable framework for
 data-driven drought forecasting and decision support"* (submitted to *Environmental Modelling & Software*).

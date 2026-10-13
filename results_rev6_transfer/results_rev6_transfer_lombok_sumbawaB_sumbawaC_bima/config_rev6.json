@@ -1,0 +1,141 @@
+{
+ "data_dir": "/kaggle/input/datasets/romiaprianto/ems-tcn-data",
+ "out_dir": "/kaggle/working/results_rev6",
+ "train_end": "2016-12-31",
+ "val_end": "2020-12-31",
+ "test_start": "2021-01-01",
+ "test_end": "2025-12-31",
+ "targets": [
+  "GWETROOT",
+  "SPEI_1"
+ ],
+ "static_feats": [
+  "lat",
+  "lon",
+  "elev",
+  "clim_precip",
+  "clim_dryP",
+  "clim_gwet",
+  "aridity"
+ ],
+ "lookback": 90,
+ "horizons": [
+  1,
+  7,
+  14,
+  30
+ ],
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "epochs": 60,
+ "batch_size": 64,
+ "rf_trees": 200,
+ "spei_clip": 3.0,
+ "spei_scale": 30,
+ "doy_halfwin": 15,
+ "wind_var": "WS2M",
+ "wind_default": 2.0,
+ "transfer_models": [
+  "TCN",
+  "RandomForest"
+ ],
+ "map_horizon": 14,
+ "map_target": "GWETROOT",
+ "regional_frac": 0.3,
+ "regional_fracs": [
+  0.2,
+  0.3,
+  0.4,
+  0.5
+ ],
+ "levels": [
+  1,
+  2,
+  3,
+  4
+ ],
+ "rf_max_features": "sqrt",
+ "transfer_rf_trees": 100,
+ "save_values": true,
+ "val_frac": 0.1,
+ "phase": "transfer",
+ "only_held": "bima",
+ "only_horizons": [
+  7
+ ],
+ "val_start": "2017-01-01",
+ "learned": [
+  "RandomForest",
+  "TCN",
+  "LSTM",
+  "Transformer"
+ ],
+ "postproc": [
+  "raw",
+  "QM",
+  "VI",
+  "THR"
+ ],
+ "thr_grid": [
+  -0.5,
+  -0.45,
+  -0.4,
+  -0.35,
+  -0.3,
+  -0.25,
+  -0.2,
+  -0.15,
+  -0.1,
+  -0.05,
+  -0.0,
+  0.05,
+  0.1,
+  0.15,
+  0.2,
+  0.25,
+  0.3,
+  0.35,
+  0.4,
+  0.45,
+  0.5,
+  0.55,
+  0.6,
+  0.65,
+  0.7,
+  0.75,
+  0.8,
+  0.85,
+  0.9,
+  0.95,
+  1.0,
+  1.05,
+  1.1,
+  1.15,
+  1.2,
+  1.25,
+  1.3,
+  1.35,
+  1.4,
+  1.45,
+  1.5
+ ],
+ "qm_quantiles": 201,
+ "boot_B": 1000,
+ "boot_block": 60,
+ "boot_seed": 2026,
+ "ep_min_dur": 7,
+ "ep_merge_gap": 10,
+ "ep_tol": 7,
+ "only_cells": null,
+ "features": [
+  "PRECTOTCORR",
+  "T2M",
+  "RH2M",
+  "ALLSKY_SFC_SW_DWN",
+  "GWETROOT",
+  "WS2M"
+ ]
+}
